@@ -2,6 +2,7 @@ package com.dmitrii.sbertest;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Xml;
 
 import org.simpleframework.xml.Attribute;
@@ -41,6 +42,9 @@ public class CbrXmlParser {
         public String value;
         public float mValue;
 
+        @Element(name="CharCode")
+        public String code;
+
         @Element(name="Name")
         public String name;
 
@@ -53,16 +57,19 @@ public class CbrXmlParser {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(value);
             dest.writeString(name);
+            dest.writeString(code);
         }
 
         public final static Parcelable.Creator<Valute> CREATOR = new Parcelable.Creator<Valute>() {
             @Override public Valute createFromParcel(Parcel source) {
                 String value = source.readString();
                 String name  = source.readString();
+                String code  = source.readString();
 
                 Valute valute = new Valute();
                 valute.value = value;
-                valute.name = name;
+                valute.name  = name;
+                valute.code  = code;
                 return valute;
             }
 
@@ -70,6 +77,13 @@ public class CbrXmlParser {
                 return new Valute[size];
             }
         };
+
+        @Override public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof Valute)) {
+                return false;
+            }
+            return TextUtils.equals(value, ((Valute) obj).value) && TextUtils.equals(code, ((Valute) obj).code);
+        }
     }
 
     @Root(name = "ValCurs", strict = false)
@@ -105,6 +119,30 @@ public class CbrXmlParser {
                 return new ValuteList[size];
             }
         };
+
+        @Override public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof ValuteList)) {
+                return false;
+            }
+            ValuteList o = (ValuteList)obj;
+            if (valuteList == null && o.valuteList == null) {
+                return true;
+            }
+            if ((valuteList == null && o.valuteList != null) ||
+                    (valuteList != null && o.valuteList == null)) {
+                return false;
+            }
+
+            if (valuteList.size() !=  o.valuteList.size()) return false;
+
+            for (Valute item : valuteList) {
+                if (!o.valuteList.contains(item)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 
 }

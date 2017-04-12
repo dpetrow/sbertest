@@ -1,6 +1,10 @@
 package com.dmitrii.sbertest;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.renderscript.Sampler;
+import android.support.v4.net.ConnectivityManagerCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +23,14 @@ public class XmlLoader {
         public void onLoaded(CbrXmlParser.ValuteList list);
     };
 
-    public void loadXmlStream(final OnLoadListener listener) {
+    public void loadXmlStream(Context context, final OnLoadListener listener) {
+        ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = manager.getActiveNetworkInfo();
+        if (info == null || !info.isConnected()) {
+            listener.onLoaded(null);
+            return;
+        }
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -31,7 +42,6 @@ public class XmlLoader {
                     InputStream in = urlConnection.getInputStream();
                     CbrXmlParser.ValuteList list = CbrXmlParser.parseStream(in);
                     listener.onLoaded(list);
-                    return;
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
