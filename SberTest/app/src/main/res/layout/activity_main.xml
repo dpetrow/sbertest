@@ -1,66 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/marginSide"
-    tools:context="com.dmitrii.sbertest.MainActivity">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/summ"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/marginTop"
-        android:layout_marginTop="@dimen/marginTop"
-        android:hint="Enter summ"
-        android:imeOptions="actionDone"
-        android:inputType="number|numberDecimal|numberSigned"
-        android:minWidth="70dp" />
-
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/spinner"
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/marginTop"
-        android:layout_marginTop="@dimen/marginTop"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/summ">
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/marginSide"
+        android:orientation="vertical"
+        tools:context="com.dmitrii.sbertest.MainActivity">
 
-    </android.support.v7.widget.AppCompatSpinner>
+        <EditText
+            android:id="@+id/summ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/marginTop"
+            android:layout_marginTop="@dimen/marginTop"
+            android:hint="Enter summ"
+            android:imeOptions="actionDone"
+            android:inputType="number|numberDecimal|numberSigned"
+            android:minWidth="70dp" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/marginTop"
+            android:layout_marginTop="@dimen/marginTop" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/marginTop"
+            android:layout_marginTop="@dimen/marginTop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+        <Button
+            android:id="@+id/btn_calc"
+            android:text="@string/convert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/marginTop"
+            android:layout_marginTop="@dimen/marginTop"
+            android:gravity="left"
+            android:textSize="24sp" />
 
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/spinner2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/marginTop"
-        android:layout_marginTop="@dimen/marginTop"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner">
+    </LinearLayout>
 
-    </android.support.v7.widget.AppCompatSpinner>
-
-    <Button
-        android:id="@+id/btn_calc"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner2"
+    <ProgressBar
+        android:id="@+id/progress"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateOnly="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/result"
-        app:layout_constraintTop_toBottomOf="@id/btn_calc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/marginTop"
-        android:layout_marginTop="@dimen/marginTop"
-        android:textSize="20sp"
-        android:gravity="left"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>

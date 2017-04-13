@@ -3,26 +3,15 @@ package com.dmitrii.sbertest;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Xml;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Text;
 import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Value;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOError;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -40,7 +29,28 @@ public class CbrXmlParser {
     public static class Valute implements Parcelable {
         @Element(name="Value")
         public String value;
-        public float mValue;
+        private boolean parsed;
+        private float   floatVal = Float.MAX_VALUE;
+
+        public float getValue() {
+            if (parsed) {
+                return floatVal;
+            }
+
+            try {
+                floatVal = Float.parseFloat(value.replace(',', '.'));
+                parsed = true;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            return floatVal;
+        }
+
+        public void setValue(float value) {
+            this.value = Float.toString(floatVal);
+            parsed = true;
+            floatVal = value;
+        }
 
         @Element(name="CharCode")
         public String code;
@@ -70,6 +80,8 @@ public class CbrXmlParser {
                 valute.value = value;
                 valute.name  = name;
                 valute.code  = code;
+
+                valute.getValue();
                 return valute;
             }
 
@@ -125,12 +137,8 @@ public class CbrXmlParser {
                 return false;
             }
             ValuteList o = (ValuteList)obj;
-            if (valuteList == null && o.valuteList == null) {
-                return true;
-            }
-            if ((valuteList == null && o.valuteList != null) ||
-                    (valuteList != null && o.valuteList == null)) {
-                return false;
+            if (valuteList == null || o.valuteList == null) {
+                return false;//doesn't matter
             }
 
             if (valuteList.size() !=  o.valuteList.size()) return false;

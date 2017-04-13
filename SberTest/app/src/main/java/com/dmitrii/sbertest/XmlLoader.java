@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 
 /**
  * Created by Dmitrii on 11.04.2017.
@@ -23,7 +24,7 @@ public class XmlLoader {
         public void onLoaded(CbrXmlParser.ValuteList list);
     };
 
-    public void loadXmlStream(Context context, final OnLoadListener listener) {
+    public void loadXmlStream(final Context context, final OnLoadListener listener) {
         ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = manager.getActiveNetworkInfo();
         if (info == null || !info.isConnected()) {
@@ -41,7 +42,19 @@ public class XmlLoader {
                     urlConnection = (HttpURLConnection) url.openConnection();
                     InputStream in = urlConnection.getInputStream();
                     CbrXmlParser.ValuteList list = CbrXmlParser.parseStream(in);
-                    listener.onLoaded(list);
+
+                    if (list != null && list.valuteList != null) {
+                        CbrXmlParser.Valute valute = new CbrXmlParser.Valute();
+                        valute.code = "RUB";
+                        valute.name = context.getResources().getString(R.string.rub);
+                        valute.setValue(1.0f);
+                        list.valuteList.add(0, valute);
+                    }
+
+                    if (list != null) {
+                        listener.onLoaded(list);
+                        MainPrefs.saveValutesList(context, list);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
